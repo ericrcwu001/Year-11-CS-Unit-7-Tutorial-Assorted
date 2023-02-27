@@ -300,7 +300,18 @@ public class Assorted {
      *              queueTime([10,2,3,3], 2) returns 10
      *              queueTime([2,3,10], 2) returns 12
      */
+    private static int minIdx(ArrayList<Integer> list) {
+        return list.indexOf(Collections.min(list));
+    }
     public static int queueTime(List<Integer> queue, int tillsOpen) {
-        return 0;
+        ArrayList<Integer> timeOfTills = new ArrayList<>();
+        for (int i = 0; i < tillsOpen; ++i) {
+            timeOfTills.add(0);
+        }
+        for (int elem : queue) {
+            timeOfTills.set(minIdx(timeOfTills), timeOfTills.get(minIdx(timeOfTills)) + elem);
+        }
+
+        return Collections.max(timeOfTills);
     }
 }
