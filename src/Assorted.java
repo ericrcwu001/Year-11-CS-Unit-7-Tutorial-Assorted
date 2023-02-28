@@ -260,24 +260,31 @@ public class Assorted {
      */
     public static List<String> wildWest(List<String> directions) {
         List<String> ans = new ArrayList<>();
-        int north = 0, south = 0, west = 0, east = 0;
-        for (String elem : directions) {
-            if (elem.compareTo("NORTH") == 0) north++;
-            if (elem.compareTo("SOUTH") == 0) south++;
-            if (elem.compareTo("WEST") == 0) west++;
-            if (elem.compareTo("EAST") == 0) east++;
+        List<Integer> changes;
+        boolean changed = true;
+
+        while (changed) {
+            changed = false;
+            changes = new ArrayList<>();
+            for (int i = 0; i < directions.size()-1; i++) {
+                if (directions.get(i).compareTo("WEST") == 0 && directions.get(i+1).compareTo("EAST") == 0 ||
+                        directions.get(i).compareTo("EAST") == 0 && directions.get(i+1).compareTo("WEST") == 0 ||
+                        directions.get(i).compareTo("NORTH") == 0 && directions.get(i+1).compareTo("SOUTH") == 0 ||
+                        directions.get(i).compareTo("SOUTH") == 0 && directions.get(i+1).compareTo("NORTH") == 0) {
+                    changed = true;
+                    if (!changes.contains(i)) {
+                        changes.add(i);
+                        changes.add(i + 1);
+                    }
+                }
+            }
+            Collections.sort(changes);
+            for (int i = 0; i < changes.size(); ++i) {
+                directions.remove(changes.get(i)-i);
+            }
         }
-        int minNS = Math.min(north, south), minEW = Math.min(east, west);
-        north -= minNS;
-        south -= minNS;
-        east -= minEW;
-        west -= minEW;
-        for (int i = 0; i < north; ++i) ans.add("NORTH");
-        for (int i = 0; i < east; ++i) ans.add("EAST");
-        for (int i = 0; i < south; ++i) ans.add("SOUTH");
-        for (int i = 0; i < west; ++i) ans.add("WEST");
-        System.out.println(ans);
-        return ans;
+
+        return directions;
     }
 
     /**
